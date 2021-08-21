@@ -1,0 +1,100 @@
+import React, { Component } from "react"
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewCompleted: false,
+      activeItem: {
+        url:"",
+        id: "",
+        highlight:"",
+        owner:"",
+        title:"",
+        code:"",
+        linenos: false,
+        language: "",
+        style: ""
+      },
+      
+      //preparing array to receive data
+      data: [],
+      };
+  }
+
+    async componentDidMount() {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/snippets/');
+        const data = await res.json();
+        console.log(data);
+        this.setState({   
+          data:data['results'],
+          viewCompleted : true
+        });
+      } catch (e) {
+        console.log(e);
+    }
+    } 
+    renderItems = () => {
+      const { viewCompleted } = this.state;
+      const newItems = this.state.data.filter (
+        item => item.linenos === viewCompleted
+      );
+      return newItems.map(item => (
+        <ul>
+          <strong>{item.title}</strong>
+          <p>url: {item.url}</p>
+          <p>id: {item.id}</p>
+          <p>owner: {item.owner}</p>
+          <p>code: {item.code}</p>
+          <p>linenos: {item.linenos}</p>
+          <p>language: {item.language}</p>
+          <p>style: {item.style}</p>
+        </ul>
+      ));
+    };
+    
+    render() {
+      return (
+        <main className="content">
+        <div className="row">
+          <div className="col-md-6 col-sm-10 mx-auto p-0">
+            <div className="card p-3">
+              <ul className="list-group list-group-flush">
+                {this.renderItems()}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+      )
+    }
+  }
+  
+export default App;
+
+
+
+
+ {/* <div className="container">
+                    <h1>CRUD App with Hooks</h1>
+                <div className="flex-row">
+                    <div className="flex-large">
+                        <h2>Add user</h2>
+                    </div>
+                    <div className="flex-large">
+                        <h2>View users</h2>
+                    <Table />
+                    </div>
+                </div> */}
+                {/* {this.state.something.map(i => (
+                <div key = {i.id}>
+                    <div>{i.title}</div>
+                    <div>{i.owner}</div>
+                    <div>{i.code}</div>
+                    <div>{i.language}</div>
+                    <div>{i.url}</div>
+                    <div>{i.linenos}</div>
+                    <div>{i.style}</div>
+                </div>))} */}
+            // </div>
