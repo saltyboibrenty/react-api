@@ -3,8 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  useParams
+  // Link,
+  // useParams
 } from "react-router-dom";
 import Add from "./pages/add";
 import MainPage from './pages/index';

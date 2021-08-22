@@ -1,58 +1,11 @@
-// import React, { useState } from 'react';
-
-
-// function Create(){
-
-//     const [title, setName] = useState('')
-//     const [code, setCode] = useState('')
-//     const [language, setLang] = useState('')
-
-//     const displayInfo = () => {
-//         console.log(title);
-//         console.log(code);
-//         console.log(language);
-//     };
-//     // const handleOnSubmit = (event) => {
-//     //     event.preventDefault();
-//     //     const values = [bookname, author, price, quantity];
-//     //     let errorMsg = '';
-//     // // const onSubmit = e => {
-//     // //     e.preventDefault();
-//     // //     const articleNew = {
-//     // //         id: article.length+1,
-//     // //         title,
-//     // //         code,
-//     // //         language
-//     // //     }
-//     // // }
-
-//     return (
-//         <div className="snippet">
-//             <div className="info">
-//                 <label className= "title">Title:</label>
-//                 <input className = "titleinput" type="text" onChange={(event) => {setName(event.target.value)}}/>
-//                 <label className = "code">Code:</label>
-//                 <textarea className = "codeinput" rows="10" cols="50"onChange={(event) => {setCode(event.target.value)}}/>       
-//                 <label className = "code" for="languages">Language:</label>
-//                 <select className="languages" id="languages" onChange={(event) => {setLang(event.target.value)}}>
-//                     <option value="ABAP">ABAP</option>
-//                     <option value="ABNF">ABNF</option>
-//                     <option value="BRAINFUCK">BRAINFUCK</option>
-//                     <option value="C">C</option>
-//                 </select>
-                
-//                 <button onClick={displayInfo}>POST</button>
-//             </div>
-//         </div>
-//     )
-// }
-// export default Create;
-
-
 import "./component.css";
 import React, { Component } from "react";
-import TutorialDataService from "./tutorialservice";
+import axios from "axios";
 
+
+const api = axios.create({
+  baseURL: "http://127.0.0.1:8000/"
+})
 export default class AddTutorial extends Component {
   constructor(props) {
     super(props);
@@ -60,20 +13,30 @@ export default class AddTutorial extends Component {
     this.onChangeCode = this.onChangeCode.bind(this);
     this.onChangeLang = this.onChangeLang.bind(this);
     this.onChangeLin = this.onChangeLin.bind(this);
+    this.onChangeStyle = this.onChangeStyle.bind(this);
     this.saveSnippet = this.saveSnippet.bind(this);
     this.newSnippet = this.newSnippet.bind(this);
 
     this.state = {
-      id: null,
       title: "",
       code: "",
-      language: "",
       linenos: false,
+      language: "ABAP",
+      style: "abap",
       published: false,
       submitted: false
     };
   }
 
+  displayInfo = () => {
+      console.log("title:", this.state.title);
+      console.log("code:",this.state.code);
+      console.log("linenos:", this.state.linenos);
+      console.log("language:",this.state.language);
+      console.log("style:",this.state.style);
+     
+     
+  }
   onChangeTitle(e) {
     this.setState({
       title: e.target.value
@@ -85,43 +48,35 @@ export default class AddTutorial extends Component {
       code: e.target.value
     });
   }
-
+  onChangeLin(e) {
+    this.setState({
+      linenos: e.target.checked
+    });
+  }
   onChangeLang(e) {
     this.setState({
       language: e.target.value
     });
   }
-  onChangeLin(e) {
+  onChangeStyle(e) {
     this.setState({
-      linenos: e.target.value
+      style: e.target.value
     });
   }
-  saveSnippet() {
-    var data = {
-      title: this.state.title,
-      code: this.state.code,
-      language: this.state.language,
-      linenos: this.state.linenos
-    };
+  
+  saveSnippet( ){
+    axios.post("http://127.0.0.1:8000/snippets/", this.state,{
+  auth: {
+    username: "brent",
+    password: "Brent2463"
+  }})
+    .then(res => {
+      console.log(res)
+    }).catch((error) => {
+      console.log(error.response);
+  })
+}
 
-    TutorialDataService.create(data)
-      .then(response => {
-        this.setState({
-          id: response.data.id,
-          title: response.data.title,
-          code: response.data.code,
-          language: response.data.language,
-          linenos: response.data.linenos,
-          published: response.data.published,
-
-          submitted: true
-        });
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
 
   newSnippet() {
     this.setState({
@@ -160,18 +115,16 @@ export default class AddTutorial extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="description">Code</label>
-                <textarea className = "codeinput" rows="10" cols="50"onChange={this.onChangeCode} value={this.state.code}> </textarea> 
+                <textarea className = "codeinput" rows="10" cols="50" value={this.state.code} onChange={this.onChangeCode}> </textarea> 
               </div>
 
               <div className="form-group">
                 <label htmlFor="description">Linenos</label>
                 <input
                   type="checkbox"
-                  id="title"
                   required
-                  value={this.state.title}
-                  onChange={this.onChangeTitle}
-                  name="title"
+                  value={this.state.linenos}
+                  onChange={this.onChangeLin}
                 />
               </div>
               <div className="form-group">
@@ -183,7 +136,15 @@ export default class AddTutorial extends Component {
                      <option value="C">C</option>
                  </select>
               </div>
-  
+              <div className="form-group">
+                <label htmlFor="description">Style</label>
+                <select className="style" id="style" onChange={this.onChangeStyle} value={this.state.style}>
+                     <option value="abap">abap</option>
+                     <option value="material">material</option>
+                     <option value="monokai">monokai</option>
+                     <option value="vscode">vscode</option>
+                 </select>
+              </div>
               <button onClick={this.saveSnippet} className="btn btn-success">
                 Submit
               </button>

@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import "./index.css";
-import logo from "./logo.svg";
 import "./users.css";
 
 class Users extends Component {
