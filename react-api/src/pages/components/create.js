@@ -1,7 +1,8 @@
 import "./component.css";
 import React, { Component } from "react";
 import axios from "axios";
-
+// import get_all_lexers from "pygments.lexers" ;
+// import get_all_styles from "pygments.styles" ;
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/"
@@ -21,7 +22,7 @@ export default class AddTutorial extends Component {
       title: "",
       code: "",
       linenos: false,
-      language: "ABAP",
+      language: "abap",
       style: "abap",
       published: false,
       submitted: false
@@ -65,6 +66,7 @@ export default class AddTutorial extends Component {
   }
   
   saveSnippet( ){
+    console.log(this.state)
     axios.post("http://127.0.0.1:8000/snippets/", this.state,{
   auth: {
     username: "brent",
@@ -130,10 +132,10 @@ export default class AddTutorial extends Component {
               <div className="form-group">
                 <label htmlFor="description">Language</label>
                 <select className="languages" id="languages" onChange={this.onChangeLang} value={this.state.language}>
-                     <option value="ABAP">ABAP</option>
-                     <option value="ABNF">ABNF</option>
-                     <option value="BRAINFUCK">BRAINFUCK</option>
-                     <option value="C">C</option>
+                     <option value="abap">ABAP</option>
+                     <option value="abnf">ABNF</option>
+                     <option value="brainfuck">BRAINFUCK</option>
+                     <option value="c">C</option>
                  </select>
               </div>
               <div className="form-group">
@@ -142,7 +144,7 @@ export default class AddTutorial extends Component {
                      <option value="abap">abap</option>
                      <option value="material">material</option>
                      <option value="monokai">monokai</option>
-                     <option value="vscode">vscode</option>
+                     <option value="friendly">friendly</option>
                  </select>
               </div>
               <button onClick={this.saveSnippet} className="btn btn-success">
