@@ -6,11 +6,12 @@ import {
   // Link,
   // useParams
 } from "react-router-dom";
-import Add from "./pages/add";
+import Create from "./pages/components/create";
 import MainPage from './pages/index';
 import Nav from "./pages/nav";
-import Snippets from "./pages/snippets";
+import SnippetsList from "./pages/components/view";
 import Users from "./pages/users";
+import Snippet from "./pages/components/individual";
 
 
 
@@ -24,9 +25,10 @@ class App extends Component {
         <Nav/>
         <Switch>
           <Route exact path ="/" component = {MainPage} />
-          <Route exact path = "/snippets" component = {Snippets} />
+          <Route exact path = "/snippets" component = {SnippetsList} />
           <Route exact path = "/users" component = {Users} />
-          <Route exact path = "/add" component = {Add} />
+          <Route exact path = "/add" component = {Create} />
+          <Route path="/snippets/:id" component={Snippet} />
         </Switch>
       </Router>
     );

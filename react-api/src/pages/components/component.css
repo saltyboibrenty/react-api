@@ -43,3 +43,31 @@ label {
     margin-left: 3%;
     margin-top: 1%;
 }
+
+.success {
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+}
+
+.success button{
+    display: flex;
+    margin-top: 1%;
+}
+
+.created-message{
+    margin-top: 2.5%;
+}
+
+.list-group{
+    list-style: none;
+    cursor: pointer;
+}
+
+.btn-deleted{
+    margin-left: 1%;
+}
+
+.link{
+    color: black;
+}

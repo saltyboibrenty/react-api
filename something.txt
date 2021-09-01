@@ -98,3 +98,8 @@ export default App;
                     <div>{i.style}</div>
                 </div>))} */}
             // </div>
+
+
+             {/* {
+          posts.map(post => <div key={post.id}>{post.title}</div>)
+        } */}

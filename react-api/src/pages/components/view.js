@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import TutorialDataService from "./components/tutorialservice";
 import { Link } from "react-router-dom";
 import axios from "axios";
-// import "./snippets.css";
+import "./component.css"
 
-export default class SnippetsLists extends Component {
+export default class SnippetsList extends Component {
   constructor(props) {
     super(props);
     
     this.setActiveSnippet = this.setActiveSnippet.bind(this);
+    this.retrieveSnippets = this.retrieveSnippets.bind(this);
+    this.refreshList = this.refreshList.bind(this);
 
     this.state = {
       snippets: [],
@@ -19,7 +20,11 @@ export default class SnippetsLists extends Component {
   }
 
   componentDidMount() {
-    // this.retrieveSnippets();
+    this.retrieveSnippets();
+    
+  }
+
+  retrieveSnippets(){
     axios.get("http://127.0.0.1:8000/snippets/")
     .then(res =>{
       this.setState({
@@ -27,6 +32,14 @@ export default class SnippetsLists extends Component {
       })
       console.log(res.data)
     })
+  } 
+
+  refreshList(){
+      this.retrieveSnippets();
+      this.setState({
+          currentSnippet: null,
+          currentIndex: -1
+      });
   }
   setActiveSnippet(snippet, index) {
     this.setState({
@@ -38,8 +51,8 @@ export default class SnippetsLists extends Component {
   render() {
     const { snippets, currentSnippet, currentIndex } = this.state;
     return (
-      <div>
-        <h1>List of Snippets</h1>
+      <div className="submit-form">
+        <h1 style = {{marginLeft:"1%"}}>List of Snippets</h1>
         <ul className="list-group" cursor = "pointer">
             {snippets &&
               snippets.map((post, index) => (
@@ -55,13 +68,7 @@ export default class SnippetsLists extends Component {
                   {post.title}
                 </li>
               ))}
-          </ul>
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllTutorials}
-          >
-            Remove All
-          </button>
+          </ul> 
 
           <div className="col-md-6">
           {currentSnippet ? (
@@ -75,9 +82,27 @@ export default class SnippetsLists extends Component {
               </div>
               <div>
                 <label>
-                  <strong>Description:</strong>
+                  <strong>Code:</strong>
                 </label>{" "}
-                {currentSnippet.description}
+                {currentSnippet.code}
+              </div>
+              <div>
+                <label>
+                  <strong>Linenos:</strong>
+                </label>{" "}
+                {currentSnippet.linenos ? "true" : "false"}
+              </div>
+              <div>
+                <label>
+                  <strong>Language:</strong>
+                </label>{" "}
+                {currentSnippet.language}
+              </div>
+              <div>
+                <label>
+                  <strong>Style:</strong>
+                </label>{" "}
+                {currentSnippet.style}
               </div>
               <div>
                 <label>
@@ -87,7 +112,7 @@ export default class SnippetsLists extends Component {
               </div>
 
               <Link
-                to={"/tutorials/" + currentSnippet.id}
+                to={"/snippets/" + currentSnippet.id}
                 className="badge badge-warning"
               >
                 Edit
@@ -96,7 +121,7 @@ export default class SnippetsLists extends Component {
           ) : (
             <div>
               <br />
-              <p>Please click on a Tutorial...</p>
+              <p>Click on a Snippet...</p>
             </div>
           )}
         </div>

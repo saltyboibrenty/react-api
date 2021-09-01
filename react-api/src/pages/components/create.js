@@ -7,7 +7,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/"
 })
-export default class AddTutorial extends Component {
+export default class Create extends Component {
   constructor(props) {
     super(props);
     this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -66,14 +66,17 @@ export default class AddTutorial extends Component {
   }
   
   saveSnippet( ){
-    console.log(this.state)
     axios.post("http://127.0.0.1:8000/snippets/", this.state,{
   auth: {
     username: "brent",
     password: "Brent2463"
   }})
     .then(res => {
-      console.log(res)
+      this.setState({
+        submitted: true,
+        published: true
+      })
+      
     }).catch((error) => {
       console.log(error.response);
   })
@@ -95,16 +98,16 @@ export default class AddTutorial extends Component {
     return (
         <div className="submit-form">
           {this.state.submitted ? (
-            <div>
-              <h4>You submitted successfully!</h4>
-              <button className="btn btn-success" onClick={this.newSnippet}>
-                Add
+            <div className = "success">
+              <h4 className = "created-message">Snippet Created!</h4>
+              <button className="btn-success" onClick={this.newSnippet}>
+                Create New Snippet
               </button>
             </div>
           ) : (
             <div>
               <div className="form-group">
-                <label htmlFor="title">Title</label>
+                <label>Title</label>
                 <input
                   type="text"
                   className="form-control"
@@ -112,14 +115,18 @@ export default class AddTutorial extends Component {
                   required
                   value={this.state.title}
                   onChange={this.onChangeTitle}
-                  name="title"
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Code</label>
-                <textarea className = "codeinput" rows="10" cols="50" value={this.state.code} onChange={this.onChangeCode}> </textarea> 
+                <label>Code</label>
+                <textarea
+                  className = "codeinput" 
+                  rows="10" 
+                  cols="50" 
+                  value={this.state.code} 
+                  onChange={this.onChangeCode}> 
+                </textarea> 
               </div>
-
               <div className="form-group">
                 <label htmlFor="description">Linenos</label>
                 <input
@@ -130,8 +137,11 @@ export default class AddTutorial extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Language</label>
-                <select className="languages" id="languages" onChange={this.onChangeLang} value={this.state.language}>
+                <label>Language</label>
+                <select 
+                  className="languages"
+                  onChange={this.onChangeLang} 
+                  value={this.state.language}>
                      <option value="abap">ABAP</option>
                      <option value="abnf">ABNF</option>
                      <option value="brainfuck">BRAINFUCK</option>
@@ -139,8 +149,12 @@ export default class AddTutorial extends Component {
                  </select>
               </div>
               <div className="form-group">
-                <label htmlFor="description">Style</label>
-                <select className="style" id="style" onChange={this.onChangeStyle} value={this.state.style}>
+                <label>Style</label>
+                <select 
+                  className="style" 
+                  id="style" 
+                  onChange={this.onChangeStyle} 
+                  value={this.state.style}>
                      <option value="abap">abap</option>
                      <option value="material">material</option>
                      <option value="monokai">monokai</option>
